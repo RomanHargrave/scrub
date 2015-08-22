@@ -558,18 +558,20 @@ main (int argc, char** argv) {
             // Check if it's a directory or otherwise.
             // If it's a file, remove it according to clobber etc...
             struct stat statBuffer;
-            stat(fileName, &statBuffer);
+            if (stat(fileName, &statBuffer) == 0) {
+                if (S_ISDIR(statBuffer.st_mode)) {
+                    Directory_process(runtimeConfig, fileName);
 
-            if (S_ISDIR(statBuffer.st_mode)) {
-                Runtime_verbose(runtimeConfig, "Processing directory %s\n", fileName);
-                Directory_process(runtimeConfig, fileName);
-
-                unless (Directory_isEmpty(fileName)) {
-                    dirty = true;
+                    if (Directory_isEmpty(fileName)) {
+                        File_unlink(runtimeConfig, fileName);
+                    } else {
+                        dirty = true;
+                    }
+                } else {
+                    File_process(runtimeConfig, fileName);
                 }
             } else {
-                Runtime_verbose(runtimeConfig, "Processing node %s\n", fileName);
-                File_process(runtimeConfig, fileName);
+                Runtime_putError("%s does not exist or is not accessible\n", fileName);
             }
 
             ++index;
