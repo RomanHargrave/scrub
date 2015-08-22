@@ -544,6 +544,11 @@ main (int argc, char** argv) {
         size_t n_files  = argc - optind;
         size_t index    = 0;
 
+        if (n_files == 0) {
+            Runtime_printHelp(imageName);
+            return ENONE;
+        }
+
         bool   dirty    = false;
 
         while (index < n_files) {
