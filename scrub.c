@@ -273,7 +273,7 @@ Runtime_verbose(Configuration* config, char* format, ...) {
  *
  * @param executableName    argv+0 (image name)
  */
-static pure void 
+static pure cold void 
 Runtime_printHelp(char* executableName) {
     Runtime_putError(
         "%s - try to clean a directory tree\n"
