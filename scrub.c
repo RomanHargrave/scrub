@@ -388,8 +388,7 @@ Directory_isEmpty(char* path) {
 
 static hot pure int // errno 
 File_process(Configuration* config, char* path) {
-    char* pathCopy = malloc(strlen(path) * sizeof(char));
-    strcpy(pathCopy, path);
+    char* pathCopy = strdup(path);
     char* fileName = basename(pathCopy);
     
     bool shouldClobber = File_shouldClobber(config, fileName);
